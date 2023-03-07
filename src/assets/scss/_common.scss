@@ -1,0 +1,59 @@
+html {
+  // 아래 font-size는 ~/tailwind.config.js의 rootFontSize 변수와 동일해야 합니다.
+  @apply text-base;
+  // font-size: $root-font;
+  // font-family: 'Do Hyeon','Spoqa Han Sans Neo',-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+h1,
+.h1 {
+  @apply text-3xl font-bold leading-none tracking-tighter-xs;
+}
+h2,
+.h2 {
+  @apply text-2xl font-bold leading-none tracking-tighter-xs;
+}
+h3,
+.h3 {
+  @apply text-xl font-bold leading-none tracking-tighter-xs;
+}
+h4,
+.h4 {
+  @apply font-bold leading-none  tracking-tighter-xsm;
+}
+h5,
+.h5 {
+  @apply text-sm font-bold leading-none tracking-normal;
+}
+h6,
+.h6 {
+  @apply text-xsm font-bold leading-none tracking-tighter-sm;
+}
+.body-1 {
+  @apply text-sm font-normal leading-none tracking-tighter-sm;
+}
+.body-2 {
+  @apply text-xsm font-normal leading-none tracking-tighter-sm;
+}
+.body-3 {
+  @apply text-xs font-normal leading-none tracking-tighter-sm;
+}
+.body-4 {
+  @apply text-xxs font-bold leading-none tracking-tighter-sm;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+button,
+button:focus,
+input,
+input[type='submit'],
+input[type='reset'] {
+  outline: none;
+}

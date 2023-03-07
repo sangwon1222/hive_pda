@@ -1,0 +1,81 @@
+# Node.js with Vue
+# Build a Node.js project that uses Vue.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  branches:
+    include:
+      - dev
+      - master
+      - stage
+      - refs/tags/*
+  tags:
+    include:
+      - v2.*
+
+# Build.SourceBranch는 refs/heads/dev 이런식으로 들어옴.
+variables:
+  isDev: $[eq(variables['Build.SourceBranch'], 'refs/heads/dev')]
+  isStage: $[eq(variables['Build.SourceBranch'], 'refs/heads/stage')]
+  isMaster: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: dev
+    condition: eq(variables.isDev, 'true')
+    jobs:
+      - job: DevDeploy
+        steps:
+          - checkout: self
+            displayName: Code Checkout
+          #   submodules: true
+
+          - task: AzureStaticWebApp@0
+            displayName: Push to StaticWebApp
+            inputs:
+              app_location: '/'
+              app_build_command: 'npm run lint && npx vue-cli-service build --mode dev'
+              api_location: 'api'
+              output_location: 'dist'
+            env:
+              azure_static_web_apps_api_token: $(dev_deployment_token)
+
+  - stage: stage
+    condition: eq(variables.isStage, 'true')
+    jobs:
+      - job: StageDeploy
+        steps:
+          - checkout: self
+            displayName: Code Checkout
+
+          - task: AzureStaticWebApp@0
+            displayName: Push to StaticWebApp
+            inputs:
+              app_location: '/'
+              app_build_command: 'npx vue-cli-service build --mode stage'
+              api_location: 'api'
+              output_location: 'dist'
+              # skip_app_build : false
+            env:
+              azure_static_web_apps_api_token: $(stage_deployment_token)
+
+  - stage: master
+    condition: eq(variables.isMaster, 'true')
+    jobs:
+      - job: MasterDeploy
+        steps:
+          - checkout: self
+            displayName: Code Checkout
+
+          - task: AzureStaticWebApp@0
+            displayName: Push to StaticWebApp
+            inputs:
+              app_location: '/'
+              app_build_command: 'npx vue-cli-service build --mode prod'
+              api_location: 'api'
+              output_location: 'dist'
+              # skip_app_build : false
+            env:
+              azure_static_web_apps_api_token: $(prod_deployment_token)
